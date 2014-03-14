@@ -1,7 +1,11 @@
+#include <iostream>
 #include "graph.h"
+
+using namespace std;
 
 Graph::Graph(int numVertices)
 {
+	cout << "Constructing the graph..." << endl;
 	this->numberOfVertices = numVertices;
 
 	// Creates an array of pointers.
@@ -20,6 +24,8 @@ void Graph::makeVertexSets()
 		if(listNode)
 		{
 			listNode->nodeVal = i;
+			listNode->nodeDegree = 0;
+			listNode->edgeWeight = 0;
 			listNode->next    = NULL;
 		}
 		else
@@ -45,7 +51,7 @@ void Graph::printGraph()
 	}
 }
 
-void Graph::addEdge(int u, int v)
+void Graph::addEdge(int u, int v, float edgeWeight)
 {
 	if (u < 0 || u > this->numberOfVertices)
 	{	
@@ -59,33 +65,26 @@ void Graph::addEdge(int u, int v)
 		return;
 	}
 
-	adjListNode *listNode = adjacencyList[u-1];
-	adjListNode *tempNode = listNode;
-	while(tempNode->next != NULL)
-	{
-		tempNode = tempNode->next;
-	}
-	adjListNode *newNode = new adjListNode;
-	newNode->nodeVal = v;
-	newNode->next    = NULL;
-	tempNode->next   = newNode;
+	adjListNode *listHeadFirstVertex  = adjacencyList[u-1];
+	adjListNode *listHeadSecondVertex = adjacencyList[v-1];
+	addToListEnd(listHeadFirstVertex, v, edgeWeight);
+	addToListEnd(listHeadSecondVertex, u, edgeWeight);
+	listHeadFirstVertex->nodeDegree++;
+	listHeadSecondVertex->nodeDegree++;
 }
 
 Graph::~Graph()
 {
+	cout << "Deleting the graph..." << endl;
 	for(int i = 0; i < this->numberOfVertices; i++)
 	{
-		delete adjacencyList[i];
+		adjListNode* listHead = adjacencyList[i];
+		adjListNode* tempNode = listHead;
+		while(tempNode)
+		{
+			adjListNode* oldNode = tempNode;
+			tempNode = tempNode->next;
+			delete oldNode;
+		}
 	}
-}
-
-int main()
-{
-	Graph *g = new Graph(10);
-	g->makeVertexSets();
-	g->addEdge(1,2);
-	g->printGraph();
-	delete g;
-	char a = getchar();
-	return 1;
 }

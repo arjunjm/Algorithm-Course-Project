@@ -1,12 +1,4 @@
-#include <iostream>
-
-using namespace std;
-
-struct adjListNode
-{
-	int nodeVal;
-	adjListNode* next;
-};
+#include "helpers.h"
 
 class Graph
 {
@@ -17,7 +9,7 @@ public:
 	Graph(int numVertices);
 	void makeVertexSets();
 	void printGraph();
-	void addEdge(int u, int v);
+	void addEdge(int u, int v, float edgeWeight);
 	~Graph();
 };
 
