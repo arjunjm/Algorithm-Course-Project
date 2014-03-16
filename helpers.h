@@ -13,6 +13,12 @@ struct adjListNode
 	adjListNode* next;
 };
 
+struct heapNode
+{
+	int	  key;
+	float value;
+};
+
 void addToListEnd(adjListNode* listHead, int nodeValue, float edgeWeight);
 float getMinimum(float a, float b);
 

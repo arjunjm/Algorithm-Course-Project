@@ -1,11 +1,14 @@
 #ifndef HEAP_H
 #define HEAP_H
 
+#include "helpers.h"
+
 class Heap
 {
 	int heapMaxSize;
 	int heapCurrentSize;
-	float *heapArray;
+	//float *heapArray;
+	heapNode *heapArray;
 
 public:
 
@@ -26,7 +29,7 @@ public:
 
 	/* Heap Operations */
 	float getMinimum();
-	void  insertElement(float value);
+	void  insertElement(heapNode hNode);
 	void  deleteRoot();
 
 	/* Misc Helper Functions */

@@ -7,6 +7,7 @@ using namespace std;
 
 int main()
 {
+	/*
 	Graph *g = new Graph(10);
 	g->makeVertexSets();
 	g->addEdge(1,2,50);
@@ -31,17 +32,30 @@ int main()
 	cout << endl;
 
 	delete g;
-	
+	*/
 
-	/* Heap Test
+	// Heap Test
+	heapNode hNode;
 	Heap *heap = new Heap(10);
-	heap->insertElement(23.5);
-	heap->insertElement(10);
-	heap->insertElement(2.5);
-	heap->insertElement(1.8);
-	heap->insertElement(3);
-	heap->insertElement(8);
-	heap->buildMinHeap();
+	hNode.key = 1;
+	hNode.value = 23.5;
+	heap->insertElement(hNode);
+	hNode.key = 2;
+	hNode.value = 10;
+	heap->insertElement(hNode);
+	hNode.key = 3;
+	hNode.value = 2.5;
+	heap->insertElement(hNode);
+	hNode.key = 4;
+	hNode.value = 1.8;
+	heap->insertElement(hNode);
+	hNode.key = 5;
+	hNode.value = 3;
+	heap->insertElement(hNode);
+	hNode.key = 6;
+	hNode.value = 8;
+	heap->insertElement(hNode);
+	//heap->buildMinHeap();
 	heap->printHeapArray();
 
 	float minimum;
@@ -53,7 +67,7 @@ int main()
 	}
 	cout << endl;
 	delete heap;
-	*/
+	
 
 	char a = getchar();
 	return 1;

@@ -8,7 +8,7 @@ Heap::Heap(int size)
 {
 	this->heapMaxSize	  = size;
 	this->heapCurrentSize = 0;
-	heapArray = new float[size];
+	heapArray = new heapNode[size];
 }
 
 Heap::~Heap()
@@ -44,7 +44,7 @@ void Heap::minHeapify(int i)
 	int left  = getLeft (i);
 	int right = getRight(i);
 
-	if ((left < this->heapCurrentSize) && (heapArray[left] < heapArray[i]))
+	if ((left < this->heapCurrentSize) && (heapArray[left].value < heapArray[i].value))
 	{
 		smallest = left;
 	}
@@ -53,7 +53,7 @@ void Heap::minHeapify(int i)
 		smallest = i;
 	}
 
-	if ((right < this->heapCurrentSize) && (heapArray[right] < heapArray[smallest]))
+	if ((right < this->heapCurrentSize) && (heapArray[right].value < heapArray[smallest].value))
 	{
 		smallest = right;
 	}
@@ -61,9 +61,9 @@ void Heap::minHeapify(int i)
 	if (smallest != i)
 	{
 		/* Swap heapArray[i] and heapArray[smallest] */
-		float temp = heapArray[i];
-		heapArray[i]		= heapArray[smallest];
-		heapArray[smallest] = temp;
+		float temp				  = heapArray[i].value;
+		heapArray[i].value		  = heapArray[smallest].value;
+		heapArray[smallest].value = temp;
 
 		minHeapify(smallest);
 	}
@@ -81,22 +81,20 @@ void Heap::buildMinHeap()
 
 float Heap::getMinimum()
 {
-	return heapArray[0];
+	return heapArray[0].value;
 }
 
-void Heap::insertElement(float value)
+void Heap::insertElement(heapNode hNode)
 {
 	heapCurrentSize += 1;
-	heapArray[heapCurrentSize - 1] = value;
-
+	heapArray[heapCurrentSize - 1] = hNode;
 	int index = heapCurrentSize - 1;
-	while( (index > 0) && (heapArray[getParent(index)] > heapArray[index]))
+	while( (index > 0) && (heapArray[getParent(index)].value > heapArray[index].value))
 	{
-		float temp					=	 heapArray[getParent(index)];
-		heapArray[getParent(index)]	=	 heapArray[index];
-		heapArray[index]            =	 temp;
-
-		index						=	 getParent(index);
+		float temp							=	 heapArray[getParent(index)].value;
+		heapArray[getParent(index)].value	=	 heapArray[index].value;
+		heapArray[index].value              =	 temp;
+		index								=	 getParent(index);
 	}
 }
 
@@ -112,7 +110,7 @@ void Heap::printHeapArray()
 	cout << "Printing heap elements!" << endl;
 	for (int i = 0; i < heapCurrentSize; i++)
 	{
-		cout << heapArray[i] << '\t';
+		cout << heapArray[i].value << '\t';
 	}
 	cout << endl;
 }
