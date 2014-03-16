@@ -1,4 +1,4 @@
-﻿Build started 3/13/2014 9:58:11 PM.
+﻿Build started 3/15/2014 10:55:13 PM.
      1>Project "C:\Users\Arjun\documents\visual studio 2010\Projects\Algorithm Project\Algorithm Project\Algorithm Project.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Algorithm Project.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -7,13 +7,13 @@
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /analyze- /errorReport:prompt main.cpp /clr:nostdlib 
          main.cpp
-     1>main.cpp(22): warning C4305: 'argument' : truncation from 'double' to 'float'
          All outputs are up-to-date.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Arjun\documents\visual studio 2010\Projects\Algorithm Project\Debug\Algorithm Project.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\Algorithm Project.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Arjun\documents\visual studio 2010\Projects\Algorithm Project\Debug\Algorithm Project.pdb" /ASSEMBLYDEBUG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 Debug\graph.obj
          Debug\heap.obj
          Debug\helpers.obj
          Debug\main.obj
+         Debug\maxBWpath.obj
          "Debug\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
          Algorithm Project.vcxproj -> C:\Users\Arjun\documents\visual studio 2010\Projects\Algorithm Project\Debug\Algorithm Project.exe
        Manifest:
@@ -25,4 +25,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.46
+Time Elapsed 00:00:01.52

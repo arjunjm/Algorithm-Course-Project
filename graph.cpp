@@ -16,6 +16,16 @@ Graph::Graph(int numVertices)
 	}
 }
 
+int Graph::getNumberOfVertices()
+{
+	return this->numberOfVertices;
+}
+
+adjListNode** Graph::getAdjacencyList()
+{
+	return adjacencyList;
+}
+
 void Graph::makeVertexSets()
 {
 	for (int i = 1; i <= numberOfVertices; i++)

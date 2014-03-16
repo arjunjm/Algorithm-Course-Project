@@ -13,3 +13,11 @@ void addToListEnd(adjListNode* listHead, int nodeValue, float edgeWeight)
 	newNode->next    = NULL;
 	tempNode->next   = newNode;
 }
+
+float getMinimum(float a, float b)
+{
+	if (a <= b)
+		return a;
+	else
+		return b;
+}

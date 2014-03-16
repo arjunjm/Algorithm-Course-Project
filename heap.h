@@ -1,3 +1,6 @@
+#ifndef HEAP_H
+#define HEAP_H
+
 class Heap
 {
 	int heapMaxSize;
@@ -30,3 +33,5 @@ public:
 	void  printHeapArray();
 	int   getHeapCurrentSize();
 };
+
+#endif /* HEAP_H */
