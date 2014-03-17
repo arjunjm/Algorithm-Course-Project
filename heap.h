@@ -7,7 +7,6 @@ class Heap
 {
 	int heapMaxSize;
 	int heapCurrentSize;
-	//float *heapArray;
 	heapNode *heapArray;
 
 public:
@@ -24,17 +23,19 @@ public:
 	int getRight(int i);
 
 	/* Heap Building Functions */
-	void  minHeapify(int i);
-	void  buildMinHeap();
+	void  maxHeapify(int i);
+	void  buildMaxHeap();
 
 	/* Heap Operations */
-	float getMinimum();
+	heapNode getMaximum();
 	void  insertElement(heapNode hNode);
 	void  deleteRoot();
+	void  deleteElement(int key);
 
 	/* Misc Helper Functions */
 	void  printHeapArray();
 	int   getHeapCurrentSize();
+	float showHeapElement(int key);
 };
 
 #endif /* HEAP_H */
