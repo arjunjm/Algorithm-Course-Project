@@ -9,7 +9,7 @@ using namespace std;
 
 int main()
 {
-	/* Graph-heap testing
+	// Graph-heap testing
 	Graph *g = new Graph(10);
 	g->makeVertexSets();
 	g->addEdge(1,2,50);
@@ -24,8 +24,10 @@ int main()
 	int		*pVector		 = new int[vertexCount];
 	float   *bandwidthVector = new float[vertexCount];
 
-	runMaxBWPathDijkstraWithHeap(g, 2, 5, pVector, bandwidthVector);
-
+	//runMaxBWPathDijkstraWithHeap(g, 2, 5, pVector, bandwidthVector);
+	runMaxBWPathKruskal(g, 1, 5, pVector, bandwidthVector);
+	
+#if 0
 	for (int i = 0; i < g->getNumberOfVertices(); i++)
 		cout << pVector[i] << '\t';
 	cout <<endl;
@@ -33,9 +35,10 @@ int main()
 	for (int i = 0; i < g->getNumberOfVertices(); i++)
 		cout << bandwidthVector[i] << '\t';
 	cout << endl;
+#endif
 
 	delete g;
-	*/
+	
 
 	/* Heap Test
 	heapNode hNode;

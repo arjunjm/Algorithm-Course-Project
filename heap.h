@@ -31,11 +31,13 @@ public:
 	void  insertElement(heapNode hNode);
 	void  deleteRoot();
 	void  deleteElement(int key);
+	void  heapSort();
 
 	/* Misc Helper Functions */
 	void  printHeapArray();
 	int   getHeapCurrentSize();
 	float showHeapElement(int key);
+	heapNode* getHeapArray();
 };
 
 #endif /* HEAP_H */

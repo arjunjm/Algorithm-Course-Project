@@ -1,5 +1,11 @@
 #include "maxBWpath.h"
 #include <iostream>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <string>
+
 using namespace std;
 
 void runMaxBWPathDijkstraNoHeap(Graph *g, int sourceVertex, int destVertex, int *parentVector, float *bandwidthVector)
@@ -175,7 +181,97 @@ void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, in
 	}
 }
 
-void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex)
+struct pairHasher
 {
+	size_t operator()(const pair<int, int> &p) const
+	{
+		return (hash<int>()(p.first) ^ hash<int>()(p.second));
+	}
+};
 
+pair<int, int> swapPairContent(pair<int, int> p)
+{
+	pair<int, int> swappedPair;
+	swappedPair.first  = p.second;
+	swappedPair.second = p.first;
+	return swappedPair;
+}
+
+void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector)
+{
+	/* Create a sorted ordering of edges first */
+	adjListNode** adjList = g->getAdjacencyList();
+	int vertexCount		  = g->getNumberOfVertices();
+
+	typedef pair<int, int> Pair;
+	typedef std::unordered_map<Pair, float, pairHasher > edgeToWeightMap;
+	typedef map<int, Pair > edgeMap;
+	edgeToWeightMap edgeWeightMap;
+	edgeMap			eMap;
+	heapNode		hNode;
+	Heap *h			= new Heap(vertexCount^2);
+
+	Pair edge;
+	int key = 0;
+	int numberOfEdges = 0;
+
+	for(int i = 0; i < vertexCount; i++)
+	{
+		adjListNode* neighborList = adjList[i]->next;
+		adjListNode* temp		  = neighborList;
+		while(temp != NULL)
+		{
+			edge = make_pair(i+1, temp->nodeVal);
+			if((edgeWeightMap.find(edge) == edgeWeightMap.end()) && (edgeWeightMap.find(swapPairContent(edge)) == edgeWeightMap.end()))
+			{
+				key++;
+				numberOfEdges++;
+				hNode.key			= key;
+				hNode.value			= temp->edgeWeight;
+				h->insertElement(hNode);
+				eMap[key]		    = edge;
+				edgeWeightMap[edge] = temp->edgeWeight;
+			}
+			temp = temp->next;
+		}	
+	}
+	/*
+	//Print Map
+	edgeMap::iterator it;
+	for (it = eMap.begin(); it != eMap.end(); it++)
+	{
+		Pair edge = it->second;
+		cout << it->first << " : (" << edge.first << ", " << edge.second << ")";
+		cout << endl;
+	}
+
+	//Print edgeWeightMap
+	edgeToWeightMap::iterator iter;
+	for (iter = edgeWeightMap.begin(); iter != edgeWeightMap.end(); iter++)
+	{
+		Pair edge = iter->first;
+		cout << "( " << edge.first << ", " << edge.second << ")" << ": " << iter->second;
+		cout << endl;
+	}
+
+	//Print heap elements increasing order
+	heapNode maximum;
+	/*while ( h->getHeapCurrentSize() )
+	{
+		maximum = h->getMaximum();
+		h->deleteRoot();
+		cout << maximum.value << '\t';
+	}*/
+
+	// Sort the edges by their weight
+	h->heapSort();
+	heapNode* heapArray = h->getHeapArray();
+	for(int i = numberOfEdges-1; i >= 0; i--)
+	{
+		cout << heapArray[i].value << ": (" << (eMap[heapArray[i].key]).first << ", " << (eMap[heapArray[i].key]).second << ")" << '\t' ;
+	}
+	cout << endl;
+	
+
+	delete h;
 }

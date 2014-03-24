@@ -4,6 +4,7 @@
 #include "graph.h"
 #include "heap.h"
 
+
 enum NodeStatus
 {
 	NODE_UNSEEN,
@@ -13,6 +14,6 @@ enum NodeStatus
 
 void runMaxBWPathDijkstraNoHeap(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector);
 void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector);
-void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex);
+void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector);
 
 #endif /* MAX_PATH_H */

@@ -60,11 +60,10 @@ void Heap::maxHeapify(int i)
 
 	if (largest != i)
 	{
-		/* Swap heapArray[i] and heapArray[smallest] */
-		float temp				  = heapArray[i].value;
-		heapArray[i].value		  = heapArray[largest].value;
-		heapArray[largest].value = temp;
-
+		/* Swap heapArray[i] and heapArray[largest] */
+		heapNode temp			  = heapArray[i];
+		heapArray[i]			  = heapArray[largest];
+		heapArray[largest]		  = temp;
 		maxHeapify(largest);
 	}
 }
@@ -94,9 +93,9 @@ void Heap::insertElement(heapNode hNode)
 	int index = heapCurrentSize - 1;
 	while( (index > 0) && (heapArray[getParent(index)].value < heapArray[index].value))
 	{
-		float temp							=	 heapArray[getParent(index)].value;
-		heapArray[getParent(index)].value	=	 heapArray[index].value;
-		heapArray[index].value              =	 temp;
+		heapNode temp						=    heapArray[getParent(index)];
+		heapArray[getParent(index)]			=	 heapArray[index];
+		heapArray[index]					=	 temp;
 		index								=	 getParent(index);
 	}
 }
@@ -133,9 +132,9 @@ void Heap::deleteElement(int key)
 	{
 		while((elementIndex > 0) && (heapArray[elementIndex].value > heapArray[getParent(elementIndex)].value))
 		{
-			float temp									=	 heapArray[getParent(elementIndex)].value;
-			heapArray[getParent(elementIndex)].value	=	 heapArray[elementIndex].value;
-			heapArray[elementIndex].value               =	 temp;
+			heapNode temp								=	 heapArray[getParent(elementIndex)];
+			heapArray[getParent(elementIndex)]			=	 heapArray[elementIndex];
+			heapArray[elementIndex]		                =	 temp;
 			elementIndex								=	 getParent(elementIndex);
 		}
 	}
@@ -143,6 +142,21 @@ void Heap::deleteElement(int key)
 	{
 		maxHeapify(elementIndex);
 	}
+}
+
+void Heap::heapSort()
+{
+	buildMaxHeap();
+	int heapCurrSize = heapCurrentSize;
+	for (int i = heapCurrSize - 1; i >= 1 ; i--)
+	{
+		heapNode temp = heapArray[i];
+		heapArray[i]  = heapArray[0];
+		heapArray[0]  = temp;
+		heapCurrentSize--;
+		maxHeapify(0);
+	}
+
 }
 
 void Heap::printHeapArray()
@@ -162,4 +176,9 @@ int Heap::getHeapCurrentSize()
 float Heap::showHeapElement(int key)
 {
 	return heapArray[key].value;
+}
+
+heapNode* Heap::getHeapArray()
+{
+	return heapArray;
 }
