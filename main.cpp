@@ -25,13 +25,13 @@ int main()
 	float   *bandwidthVector = new float[vertexCount];
 
 	//runMaxBWPathDijkstraWithHeap(g, 2, 5, pVector, bandwidthVector);
-	runMaxBWPathKruskal(g, 1, 5, pVector, bandwidthVector);
+	runMaxBWPathKruskal(g, 1, 5, pVector);
 	
-#if 0
 	for (int i = 0; i < g->getNumberOfVertices(); i++)
 		cout << pVector[i] << '\t';
 	cout <<endl;
 
+#if 0
 	for (int i = 0; i < g->getNumberOfVertices(); i++)
 		cout << bandwidthVector[i] << '\t';
 	cout << endl;

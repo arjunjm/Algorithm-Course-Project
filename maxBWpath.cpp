@@ -5,9 +5,97 @@
 #include <unordered_set>
 #include <utility>
 #include <string>
+#include <queue>
 
 using namespace std;
 
+/* Helper functions */
+struct pairHasher
+{
+	size_t operator()(const pair<int, int> &p) const
+	{
+		return (hash<int>()(p.first) ^ hash<int>()(p.second));
+	}
+};
+
+pair<int, int> swapPairContent(pair<int, int> p)
+{
+	pair<int, int> swappedPair;
+	swappedPair.first  = p.second;
+	swappedPair.second = p.first;
+	return swappedPair;
+}
+
+void makeSet(int vertexNumber, int *parentVector, int *rankVector)
+{
+	parentVector[vertexNumber - 1] = vertexNumber;
+	rankVector[vertexNumber - 1] = 0;
+}
+
+int findSet(int vertexNumber, int *parentVector)
+{
+	if (parentVector[vertexNumber - 1] != vertexNumber)
+		return findSet(parentVector[vertexNumber - 1], parentVector);
+	return parentVector[vertexNumber - 1];
+}
+
+void doUnion(int v1, int v2, int *rankVector, int *parentVector)
+{
+	if (rankVector[v1 - 1] < rankVector[v2 - 1])
+	{
+		parentVector[v1 - 1] = v2;
+	}
+	else if (rankVector[v1 - 1] > rankVector[v2 - 1])
+	{
+		parentVector[v2 - 1] = v1;
+	}
+	else
+	// equal to case
+	{
+		parentVector[v1 - 1] = v2;
+		rankVector[v2 - 1]   += 1;
+	}
+}
+
+void breadthFirstSearch(Graph *g, int sourceVertex, int destVertex, int* pathVector)
+{
+	int vertexCount = g->getNumberOfVertices();
+	adjListNode** adjacencyList = g->getAdjacencyList();
+	NodeColor *colorVector = new NodeColor[vertexCount];
+	queue <int> vertexQueue;
+
+	for (int i = 0; i < vertexCount; i++)
+	{
+		colorVector[i] = WHITE;
+		pathVector[i]  = 0;
+	}
+
+	colorVector[sourceVertex - 1] = GRAY;
+	vertexQueue.push(sourceVertex);
+
+	int temp;
+	adjListNode* neighborList;
+	while(!vertexQueue.empty())
+	{
+		temp = vertexQueue.front();
+		vertexQueue.pop();
+		neighborList = adjacencyList[temp - 1]->next;
+		while(neighborList != NULL)
+		{
+			int vertexNumber = neighborList->nodeVal;
+			if(colorVector[vertexNumber - 1] == WHITE)
+			{
+				colorVector[vertexNumber - 1] = GRAY;
+				pathVector[vertexNumber - 1] = temp;
+				vertexQueue.push(neighborList->nodeVal);
+			}
+			neighborList = neighborList->next;
+		}
+		colorVector[temp - 1] = BLACK; // Processing done!
+	}
+}
+
+/* Max Bandwidth Algorithms */
 void runMaxBWPathDijkstraNoHeap(Graph *g, int sourceVertex, int destVertex, int *parentVector, float *bandwidthVector)
 {
 	int vertexCount = g->getNumberOfVertices();
@@ -181,23 +269,7 @@ void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, in
 	}
 }
 
-struct pairHasher
-{
-	size_t operator()(const pair<int, int> &p) const
-	{
-		return (hash<int>()(p.first) ^ hash<int>()(p.second));
-	}
-};
-
-pair<int, int> swapPairContent(pair<int, int> p)
-{
-	pair<int, int> swappedPair;
-	swappedPair.first  = p.second;
-	swappedPair.second = p.first;
-	return swappedPair;
-}
-
-void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector)
+void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector)
 {
 	/* Create a sorted ordering of edges first */
 	adjListNode** adjList = g->getAdjacencyList();
@@ -235,43 +307,37 @@ void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* parent
 			temp = temp->next;
 		}	
 	}
-	/*
-	//Print Map
-	edgeMap::iterator it;
-	for (it = eMap.begin(); it != eMap.end(); it++)
-	{
-		Pair edge = it->second;
-		cout << it->first << " : (" << edge.first << ", " << edge.second << ")";
-		cout << endl;
-	}
 
-	//Print edgeWeightMap
-	edgeToWeightMap::iterator iter;
-	for (iter = edgeWeightMap.begin(); iter != edgeWeightMap.end(); iter++)
-	{
-		Pair edge = iter->first;
-		cout << "( " << edge.first << ", " << edge.second << ")" << ": " << iter->second;
-		cout << endl;
-	}
-
-	//Print heap elements increasing order
-	heapNode maximum;
-	/*while ( h->getHeapCurrentSize() )
-	{
-		maximum = h->getMaximum();
-		h->deleteRoot();
-		cout << maximum.value << '\t';
-	}*/
-
+	/* The following implements Kruskal's algorithm */
 	// Sort the edges by their weight
 	h->heapSort();
 	heapNode* heapArray = h->getHeapArray();
+	Graph *maxSpanningTree = new Graph(vertexCount);
+	maxSpanningTree->makeVertexSets();
+	int *rankVector	  = new int[vertexCount];
+	int *parentVector = new int[vertexCount];
+	for (int i = 1; i <= vertexCount; i++)
+	{
+		makeSet(i, parentVector, rankVector);
+	}
 	for(int i = numberOfEdges-1; i >= 0; i--)
 	{
-		cout << heapArray[i].value << ": (" << (eMap[heapArray[i].key]).first << ", " << (eMap[heapArray[i].key]).second << ")" << '\t' ;
-	}
-	cout << endl;
-	
+		// Get the largest weight edge from the heap-sorted array
+		Pair edge = eMap[heapArray[i].key];
+		int v1 = edge.first;
+		int v2 = edge.second;
+		int r1 = findSet(v1, parentVector);
+		int r2 = findSet(v2, parentVector);
+		if (r1 != r2)
+		{
+			maxSpanningTree->addEdge(v1, v2, heapArray[i].value);
+			doUnion(r1, r2, rankVector, parentVector);
+		}
 
+	}
+	maxSpanningTree->printGraph();
+	breadthFirstSearch(maxSpanningTree, sourceVertex, destVertex, pathVector);
+
+	delete maxSpanningTree;
 	delete h;
 }
