@@ -1,6 +1,7 @@
 #include "heap.h"
 #include <math.h>
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -181,4 +182,39 @@ float Heap::showHeapElement(int key)
 heapNode* Heap::getHeapArray()
 {
 	return heapArray;
+}
+
+void Heap::heapTest()
+{
+	heapNode hNode;
+	Heap *heap = new Heap(1000);
+	srand(time(NULL));
+	for (int i = 0; i < 20; i++)
+	{
+		hNode.key	= i;
+		hNode.value	= rand() % 1000;
+		heap->insertElement(hNode);
+	}
+	hNode.key = 50;
+	hNode.value = 1000;
+	heap->insertElement(hNode);
+	//heap->buildMaxHeap();
+	heap->printHeapArray();
+
+	heapNode maximum;
+
+	int key = 13;
+	cout << "Generated key = " << key << endl;
+	cout << "Deleting element " << heap->showHeapElement(key) << endl;
+	heap->deleteElement(key);
+	
+
+	while ( heap->getHeapCurrentSize() )
+	{
+		maximum = heap->getMaximum();
+		heap->deleteRoot();
+		cout << maximum.value << '\t';
+	}
+	cout << endl;
+	delete heap;
 }

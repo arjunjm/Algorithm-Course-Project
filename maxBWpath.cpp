@@ -335,8 +335,9 @@ void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVe
 		}
 
 	}
-	maxSpanningTree->printGraph();
+	//maxSpanningTree->printGraph();
 	breadthFirstSearch(maxSpanningTree, sourceVertex, destVertex, pathVector);
+
 
 	delete maxSpanningTree;
 	delete h;

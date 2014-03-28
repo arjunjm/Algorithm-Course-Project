@@ -5,7 +5,6 @@ using namespace std;
 
 Graph::Graph(int numVertices)
 {
-	cout << "Constructing the graph..." << endl;
 	this->numberOfVertices = numVertices;
 
 	// Creates an array of pointers.
@@ -19,6 +18,20 @@ Graph::Graph(int numVertices)
 int Graph::getNumberOfVertices()
 {
 	return this->numberOfVertices;
+}
+
+float Graph::getEdgeWeight(int v1, int v2)
+{
+	adjListNode* neighborListV1 = adjacencyList[v1 - 1];
+	adjListNode* temp = neighborListV1->next;
+	while(temp != NULL)
+	{
+		if (temp->nodeVal == v2)
+		{
+			return temp->edgeWeight;
+		}
+		temp = temp->next;
+	}
 }
 
 adjListNode** Graph::getAdjacencyList()
@@ -85,7 +98,6 @@ void Graph::addEdge(int u, int v, float edgeWeight)
 
 Graph::~Graph()
 {
-	cout << "Deleting the graph..." << endl;
 	for(int i = 0; i < this->numberOfVertices; i++)
 	{
 		adjListNode* listHead = adjacencyList[i];

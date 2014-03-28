@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <stack>
 #include "graph.h"
 #include "heap.h"
 #include "maxBWpath.h"
@@ -9,71 +10,141 @@ using namespace std;
 
 int main()
 {
-	// Graph-heap testing
+	// Creating graph
 	Graph *g = new Graph(10);
 	g->makeVertexSets();
 	g->addEdge(1,2,50);
 	g->addEdge(1,3,20);
 	g->addEdge(4,5,10);
 	g->addEdge(1,4,5);
-	g->addEdge(3,5,2);
+	g->addEdge(3,5,10);
 	g->addEdge(2,3,5);
 	//g->printGraph();
 
 	int		vertexCount		 = g->getNumberOfVertices();
-	int		*pVector		 = new int[vertexCount];
-	float   *bandwidthVector = new float[vertexCount];
+	int sourceVertex = 2;
+	int destVertex = 4;
 
-	//runMaxBWPathDijkstraWithHeap(g, 2, 5, pVector, bandwidthVector);
-	runMaxBWPathKruskal(g, 1, 5, pVector);
+	// Algorithm #1
+	cout << "Calculating Maximum Bandwidth Path Using Dijkstra's Method without heap" << endl;
+	cout << "=======================================================================" << endl;
+
+	int		*pVector_1		   = new int[vertexCount];
+	float   *bandwidthVector_1 = new float[vertexCount];
 	
-	for (int i = 0; i < g->getNumberOfVertices(); i++)
-		cout << pVector[i] << '\t';
-	cout <<endl;
+	runMaxBWPathDijkstraNoHeap(g, sourceVertex, destVertex, pVector_1, bandwidthVector_1);
 
-#if 0
-	for (int i = 0; i < g->getNumberOfVertices(); i++)
-		cout << bandwidthVector[i] << '\t';
+	// The stack is just used for ease in printing the path
+	stack<int> vertexStack_1;
+
+	vertexStack_1.push(destVertex);
+	int vertex = pVector_1[destVertex - 1];
+	do
+	{
+		vertexStack_1.push(vertex);
+		if (vertex == sourceVertex)
+			break;
+		vertex = pVector_1[vertex - 1];
+	} while (true);
+
+	cout << "Max Bandwidth Path  :: ";
+	while(!vertexStack_1.empty())
+	{
+		cout << vertexStack_1.top();
+		if (vertexStack_1.top() != destVertex)
+			cout << "-->";
+		vertexStack_1.pop();
+	}
+
 	cout << endl;
-#endif
+	cout << "Max Bandwidth Value :: " << bandwidthVector_1[destVertex - 1] << endl;
 
+	cout << "---------------------------------------------------------------------------";
+	cout << endl << endl << endl;
+
+	delete pVector_1;
+	delete bandwidthVector_1;
+
+	// Algorithm #2
+	cout << "Calculating Maximum Bandwidth Path Using Dijkstra's Method with heap" << endl;
+	cout << "====================================================================" << endl;
+
+	int		*pVector_2		   = new int[vertexCount];
+	float   *bandwidthVector_2 = new float[vertexCount];
+	
+	runMaxBWPathDijkstraWithHeap(g, sourceVertex, destVertex, pVector_2, bandwidthVector_2);
+	
+	// The stack is just used for ease in printing the path
+	stack<int> vertexStack_2;
+
+	vertexStack_2.push(destVertex);
+	int vertexVal = pVector_2[destVertex - 1];
+	do
+	{
+		vertexStack_2.push(vertexVal);
+		if (vertexVal == sourceVertex)
+			break;
+		vertexVal = pVector_2[vertexVal - 1];
+	} while (true);
+
+	cout << "Max Bandwidth Path  :: ";
+	while(!vertexStack_2.empty())
+	{
+		cout << vertexStack_2.top();
+		if (vertexStack_2.top() != destVertex)
+			cout << "-->";
+		vertexStack_2.pop();
+	}
+
+	cout << endl;
+	cout << "Max Bandwidth Value :: " << bandwidthVector_2[destVertex - 1] << endl;
+
+	cout << "---------------------------------------------------------------------------";
+	cout << endl << endl << endl;
+
+	delete pVector_2;
+	delete bandwidthVector_2;
+
+	// Algorithm #3
+	cout << "Calculating Maximum Bandwidth Path Using Kruskal's Method" << endl;
+	cout << "=========================================================" << endl;
+	int *pVector_3			   = new int[vertexCount];
+	runMaxBWPathKruskal(g, sourceVertex, destVertex, pVector_3);
+
+	stack<int> vertexStack_3;
+	int predecessorVertex = pVector_3[destVertex - 1];
+	vertexStack_3.push(destVertex);
+	
+	int bandwidth = g->getEdgeWeight(destVertex, predecessorVertex);
+	int temp = 0;
+	do
+	{
+		vertexStack_3.push(predecessorVertex);
+		if (predecessorVertex == sourceVertex)
+			break;
+		temp = g->getEdgeWeight(predecessorVertex, pVector_3[predecessorVertex - 1]);
+		if (temp < bandwidth)
+			bandwidth = temp;
+		predecessorVertex = pVector_3[predecessorVertex - 1];	
+	}while (true);
+
+	cout << "Max Bandwidth Path  :: ";
+	while(!vertexStack_3.empty())
+	{
+		cout << vertexStack_3.top();
+		if (vertexStack_3.top() != destVertex)
+			cout << "-->";
+		vertexStack_3.pop();
+	}
+
+	cout << endl;
+	cout << "Max Bandwidth Value :: " << bandwidth << endl;
+	cout << "---------------------------------------------------------------------------";
+
+	cout << endl << endl << endl;
+	
 	delete g;
 	
-
-	/* Heap Test
-	heapNode hNode;
-	Heap *heap = new Heap(1000);
-	srand(time(NULL));
-	for (int i = 0; i < 20; i++)
-	{
-		hNode.key	= i;
-		hNode.value	= rand() % 1000;
-		heap->insertElement(hNode);
-	}
-	hNode.key = 50;
-	hNode.value = 1000;
-	heap->insertElement(hNode);
-	//heap->buildMaxHeap();
-	heap->printHeapArray();
-
-	heapNode maximum;
-
-	int key = 13;
-	cout << "Generated key = " << key << endl;
-	cout << "Deleting element " << heap->showHeapElement(key) << endl;
-	heap->deleteElement(key);
-	
-
-	while ( heap->getHeapCurrentSize() )
-	{
-		maximum = heap->getMaximum();
-		heap->deleteRoot();
-		cout << maximum.value << '\t';
-	}
-	cout << endl;
-	delete heap;
-	*/
-
 	char a = getchar();
 	return 1;
 }

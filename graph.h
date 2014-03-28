@@ -16,6 +16,9 @@ public:
 	void printGraph();
 	void addEdge(int u, int v, float edgeWeight);
 	~Graph();
+
+	/* Helper functions */
+	float getEdgeWeight(int v1, int v2);
 };
 
 #endif /* GRAPH_H */

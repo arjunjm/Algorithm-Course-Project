@@ -38,6 +38,7 @@ public:
 	int   getHeapCurrentSize();
 	float showHeapElement(int key);
 	heapNode* getHeapArray();
+	static void  heapTest();
 };
 
 #endif /* HEAP_H */
