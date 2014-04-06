@@ -6,6 +6,7 @@
 #include <utility>
 #include <string>
 #include <queue>
+#include <time.h>
 
 using namespace std;
 
@@ -269,19 +270,21 @@ void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, in
 	}
 }
 
+typedef pair<int, int> Pair;
+typedef std::unordered_map<Pair, float, pairHasher > edgeToWeightMap;
+typedef map<int, Pair > edgeMap;
+edgeToWeightMap edgeWeightMap;
+edgeMap			eMap;
+
 void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector)
 {
 	/* Create a sorted ordering of edges first */
+	float runTime;
 	adjListNode** adjList = g->getAdjacencyList();
 	int vertexCount		  = g->getNumberOfVertices();
-
-	typedef pair<int, int> Pair;
-	typedef std::unordered_map<Pair, float, pairHasher > edgeToWeightMap;
-	typedef map<int, Pair > edgeMap;
-	edgeToWeightMap edgeWeightMap;
-	edgeMap			eMap;
 	heapNode		hNode;
-	Heap *h			= new Heap(vertexCount^2);
+	int heapSize	= g->getNumberOfEdges() * 2;
+	Heap *h			= new Heap(heapSize);
 
 	Pair edge;
 	int key = 0;
@@ -335,9 +338,8 @@ void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVe
 		}
 
 	}
-	//maxSpanningTree->printGraph();
-	breadthFirstSearch(maxSpanningTree, sourceVertex, destVertex, pathVector);
 
+	breadthFirstSearch(maxSpanningTree, sourceVertex, destVertex, pathVector);
 
 	delete maxSpanningTree;
 	delete h;

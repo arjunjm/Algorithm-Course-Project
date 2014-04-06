@@ -6,11 +6,13 @@
 class Graph
 {
 	int numberOfVertices;
+	int numberOfEdges;
 	adjListNode **adjacencyList;
 
 public:
 	Graph(int numVertices);
 	int  getNumberOfVertices();
+	int  getNumberOfEdges();
 	adjListNode** getAdjacencyList();
 	void makeVertexSets();
 	void printGraph();
@@ -19,6 +21,13 @@ public:
 
 	/* Helper functions */
 	float getEdgeWeight(int v1, int v2);
+	bool  doesEdgeExist(int v1, int v2);
+	void  printVertexDegree();
+	void  graphTest();
+
+	/* Extra functions */
+	static Graph* generateRandomGraph(int numVertices, int nodeDegree);
+	static Graph* generateRandomGraph(int numVertices, float outgoingEdgeRatio);
 };
 
 #endif /* GRAPH_H */

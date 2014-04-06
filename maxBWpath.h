@@ -30,3 +30,4 @@ void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, in
 void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector);
 
 #endif /* MAX_PATH_H */
+
