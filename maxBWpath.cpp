@@ -271,20 +271,20 @@ void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, in
 }
 
 typedef pair<int, int> Pair;
-typedef std::unordered_map<Pair, float, pairHasher > edgeToWeightMap;
+typedef map<Pair, float > edgeToWeightMap;
 typedef map<int, Pair > edgeMap;
 edgeToWeightMap edgeWeightMap;
 edgeMap			eMap;
 
-void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector)
+float runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector)
 {
 	/* Create a sorted ordering of edges first */
 	float runTime;
 	adjListNode** adjList = g->getAdjacencyList();
 	int vertexCount		  = g->getNumberOfVertices();
-	heapNode		hNode;
-	int heapSize	= g->getNumberOfEdges() * 2;
-	Heap *h			= new Heap(heapSize);
+	heapNode hNode;
+	int heapSize		  = g->getNumberOfEdges() + 1;
+	Heap *h				  = new Heap(heapSize);
 
 	Pair edge;
 	int key = 0;
@@ -292,6 +292,7 @@ void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVe
 
 	for(int i = 0; i < vertexCount; i++)
 	{
+		//cout << i << endl;
 		adjListNode* neighborList = adjList[i]->next;
 		adjListNode* temp		  = neighborList;
 		while(temp != NULL)
@@ -313,6 +314,9 @@ void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVe
 
 	/* The following implements Kruskal's algorithm */
 	// Sort the edges by their weight
+	clock_t t1, t2;
+	float runningTime;
+	t1 = clock();
 	h->heapSort();
 	heapNode* heapArray = h->getHeapArray();
 	Graph *maxSpanningTree = new Graph(vertexCount);
@@ -341,6 +345,12 @@ void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVe
 
 	breadthFirstSearch(maxSpanningTree, sourceVertex, destVertex, pathVector);
 
+	t2 = clock();
+	runningTime = ((float) t2 - (float) t1) / CLOCKS_PER_SEC;
+	
 	delete maxSpanningTree;
 	delete h;
+
+	return runningTime;
+	
 }

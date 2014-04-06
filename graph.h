@@ -25,7 +25,7 @@ public:
 	void  printVertexDegree();
 	void  graphTest();
 
-	/* Extra functions */
+	/* Random Graph generation functions */
 	static Graph* generateRandomGraph(int numVertices, int nodeDegree);
 	static Graph* generateRandomGraph(int numVertices, float outgoingEdgeRatio);
 };

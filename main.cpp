@@ -10,31 +10,58 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
+	if (argc < 2)
+	{
+		cout << " No input provided! Please specify the graph to generate!! Exiting! \n";
+		getchar();
+		return 0;
+	}
+	
 	clock_t t1, t2;
 	float runningTime;
 
-	Graph *randomGraph_1, *randomGraph_2;
-	list<Graph*> graphList;
+	Graph *randomGraph_1, *randomGraph_2, *graph;
 	
-	do
+	if (strcmp(argv[1], "1") == 0)
 	{
-		randomGraph_1 = Graph::generateRandomGraph(5000, 6);
+		t1 = clock();
+		cout << "Generating graph with 5000 vertices in which every vertex has degree 6!" << endl;
+		do
+		{
+			
+			randomGraph_1 = Graph::generateRandomGraph(5000, 6);
+			
 
-	} while (randomGraph_1 == NULL);
+		} while (randomGraph_1 == NULL);
+		t2 = clock();
+		runningTime = ((float) t2 - (float) t1) / CLOCKS_PER_SEC;
+		cout << " Graph generated in " << runningTime << " seconds " << endl;
+		graph = randomGraph_1;
+	}
 
-	
+	else if (strcmp(argv[1], "2") == 0)
+	{
+		t1 = clock();
+		cout << "Generating graph with 5000 vertices in which every vertex has an edge to about 20 percent of the other vertices" << endl;
+		randomGraph_2 = Graph::generateRandomGraph(5000, (float)0.2);
+		t2 = clock();
+		runningTime = ((float) t2 - (float) t1) / CLOCKS_PER_SEC;
+		cout << " Graph generated in " << runningTime << " seconds " << endl;
+		graph = randomGraph_2;
+	}
+	else
+	{
+		cout << "Arguments unknown! Exiting!!\n";
+		getchar();
+		return 0;
+		cout << endl;
+	}
 
-	randomGraph_2 = Graph::generateRandomGraph(5000, (float)0.2);
-	cout << endl << "Number of edges = " << randomGraph_2->getNumberOfEdges() << endl;
-	char c = getchar();
-	//return 0;
-	graphList.push_back(randomGraph_1);
-	graphList.push_back(randomGraph_2);
-	Graph *graph = randomGraph_1;
 	int sourceVertex, destVertex;
 	int		vertexCount		 = graph->getNumberOfVertices();
+
 	srand(time(NULL));
 
 	sourceVertex = rand() % vertexCount + 1;
@@ -42,8 +69,10 @@ int main()
 	{
 		destVertex = rand() % vertexCount + 1;
 	} while (destVertex == sourceVertex);
-	cout << " Source Vertex = " << sourceVertex << endl;
-	cout << " Destination Vertex = " << destVertex << endl << endl;
+
+	cout << endl;
+	cout << "Source Vertex = " << sourceVertex << endl;
+	cout << "Destination Vertex = " << destVertex << endl << endl;
 
 	// Algorithm #1
 	t1 = clock();
@@ -143,7 +172,7 @@ int main()
 	cout << "Calculating Maximum Bandwidth Path Using Kruskal's Method" << endl;
 	cout << "=========================================================" << endl;
 	int *pVector_3			   = new int[vertexCount];
-	runMaxBWPathKruskal(graph, sourceVertex, destVertex, pVector_3);
+	float algorithmRunningTime = runMaxBWPathKruskal(graph, sourceVertex, destVertex, pVector_3);
 	stack<int> vertexStack_3;
 	int predecessorVertex = pVector_3[destVertex - 1];
 	vertexStack_3.push(destVertex);
@@ -176,13 +205,13 @@ int main()
 	t2 = clock();
 	cout << endl;
 	runningTime = ((float) t2 - (float) t1) / CLOCKS_PER_SEC;
-	cout << "Running time : " << runningTime << " seconds" << endl;
+	cout << "Algorithm Running Time (excluding the time for data structure creation and intialization) : " << algorithmRunningTime << endl;
+	cout << "Total Running time : " << runningTime << " seconds" << endl;
 	cout << "---------------------------------------------------------------------------";
 
 	cout << endl << endl << endl;
 	
-
-	delete randomGraph_1;
+	delete graph;
 
 	cout << "Program done executing..Press any key to quit!" <<endl;
 	char a = getchar();

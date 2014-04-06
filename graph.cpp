@@ -74,7 +74,7 @@ void Graph::printGraph()
 		adjListNode *tempNode = listNode;
 		while(tempNode != NULL)
 		{
-			cout << tempNode->nodeVal << "-->";
+			cout << tempNode->nodeVal << " ( " << tempNode->edgeWeight << ") " << "-->";
 			tempNode = tempNode->next;
 		}
 		cout << "NULL";
@@ -162,7 +162,7 @@ Graph* Graph::generateRandomGraph(int numberOfVertices, float outgoingEdgeRatio)
 	srand(time(0));
 	for (int i = 1; i <= numberOfVertices; i++)
 	{
-		cout << i << endl;
+		//cout << i << endl;
 		adjListNode *vertex  = adjacencyList[i-1];
 		for (int j = 1; j <= outgoingEdgeRatio * numberOfVertices; j++)
 		{
@@ -170,7 +170,8 @@ Graph* Graph::generateRandomGraph(int numberOfVertices, float outgoingEdgeRatio)
 			int randomVertexNumber;
 			randomVertexNumber	= rand() % numberOfVertices + 1;
 			randomEdgeWeight	= rand() % 100 + 1;
-			if (!g->doesEdgeExist(i, randomVertexNumber) && (randomVertexNumber != i))
+			if (!g->doesEdgeExist(i, randomVertexNumber) && (randomVertexNumber != i) && 
+				(vertex->nodeDegree < (outgoingEdgeRatio * numberOfVertices)) && (adjacencyList[randomVertexNumber-1]->nodeDegree < ((outgoingEdgeRatio * numberOfVertices))))
 			{
 				g->addEdge(i, randomVertexNumber, randomEdgeWeight);
 			}

@@ -27,7 +27,7 @@ void breadthFirstSearch(Graph *g, int sourceVertex, int destVertex, int *pathvVe
 
 void runMaxBWPathDijkstraNoHeap(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector);
 void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, int* parentVector, float* bandwidthVector);
-void runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector);
+float runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector);
 
 #endif /* MAX_PATH_H */
 
