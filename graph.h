@@ -24,6 +24,7 @@ public:
 	bool  doesEdgeExist(int v1, int v2);
 	void  printVertexDegree();
 	void  graphTest();
+    void  addCycle();
 
 	/* Random Graph generation functions */
 	static Graph* generateRandomGraph(int numVertices, int nodeDegree);

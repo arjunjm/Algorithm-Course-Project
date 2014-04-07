@@ -6,6 +6,7 @@
 #include <stack>
 #include <time.h>
 #include <list>
+#include <unistd.h>
 #include "graph.h"
 #include "heap.h"
 #include "maxBWpath.h"
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
 	
 	clock_t t1, t2;
 	float runningTime;
+    srand(time(NULL));
 
 	Graph *randomGraph_1, *randomGraph_2, *graph;
 	
@@ -59,7 +61,6 @@ int main(int argc, char *argv[])
 	}
 
     int numberOfIterations = atoi(argv[2]);
-    srand(time(NULL));
     for (int i = 0 ; i < numberOfIterations; i++)
     {
         cout << endl;
@@ -68,7 +69,6 @@ int main(int argc, char *argv[])
         cout << "Generating new source-destination pairs! (Iteration : " << i+1 << ")";
         int sourceVertex, destVertex;
         int		vertexCount		 = graph->getNumberOfVertices();
-
 
         sourceVertex = rand() % vertexCount + 1;
         do
@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
         cout << "Source Vertex = " << sourceVertex << endl;
         cout << "Destination Vertex = " << destVertex << endl << endl;
 
+        graph->addCycle();
         // Algorithm #1
         t1 = clock();
         cout << "Calculating Maximum Bandwidth Path Using Dijkstra's Method without heap" << endl;
@@ -217,6 +218,7 @@ int main(int argc, char *argv[])
 
         delete pVector_3;
         cout << endl << endl << endl;
+        sleep(1);
     }	
 	delete graph;
 

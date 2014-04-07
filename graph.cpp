@@ -136,7 +136,7 @@ Graph* Graph::generateRandomGraph(int numberOfVertices, int nodeDegree)
 		int randomEdgeWeight;
 		while (vertex->nodeDegree < nodeDegree)
 		{
-			randomVertex		= rand() % (numberOfVertices * 2) + 1;
+			randomVertex		= rand() %  numberOfVertices + 1;
 			randomEdgeWeight	= rand() % (numberOfVertices * 2) + 1;
 			if (!g->doesEdgeExist(i, randomVertex) && (randomVertex != i) && (adjacencyList[randomVertex-1]->nodeDegree < nodeDegree))
 			{
@@ -168,7 +168,7 @@ Graph* Graph::generateRandomGraph(int numberOfVertices, float outgoingEdgeRatio)
 		{
 			int randomEdgeWeight;
 			int randomVertexNumber;
-			randomVertexNumber	= rand() % (numberOfVertices * 2) + 1;
+			randomVertexNumber	= rand() % numberOfVertices + 1;
 			randomEdgeWeight	= rand() % (numberOfVertices * 2) + 1;
 			if (!g->doesEdgeExist(i, randomVertexNumber) && (randomVertexNumber != i) && 
 				(vertex->nodeDegree < (outgoingEdgeRatio * numberOfVertices)) && (adjacencyList[randomVertexNumber-1]->nodeDegree < ((outgoingEdgeRatio * numberOfVertices))))
@@ -192,6 +192,22 @@ void Graph::printVertexDegree()
 			cout << listNode->nodeVal << ": " << listNode->nodeDegree << endl;
 		}
 	}	
+}
+
+void Graph::addCycle()
+{
+    srand(time(0));
+    int randomEdgeWeight;
+    int i = 1;
+    for (i = 1; i < numberOfVertices; i++)
+    {
+        randomEdgeWeight = rand() % (numberOfVertices * 2) + 1;
+        if (!doesEdgeExist (i,(i + 1)))
+            this->addEdge(i, i + 1, randomEdgeWeight);
+    }
+    randomEdgeWeight = rand() % (numberOfVertices * 2) + 1;
+    if (!doesEdgeExist (i, 1))
+        this->addEdge(i, 1, randomEdgeWeight);
 }
 
 void Graph::graphTest()
