@@ -1,4 +1,5 @@
 #include "heap.h"
+#include <cstdlib>
 #include <math.h>
 #include <iostream>
 #include <time.h>

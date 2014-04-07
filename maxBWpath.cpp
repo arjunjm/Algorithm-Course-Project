@@ -11,6 +11,7 @@
 using namespace std;
 
 /* Helper functions */
+#if 0
 struct pairHasher
 {
 	size_t operator()(const pair<int, int> &p) const
@@ -18,6 +19,7 @@ struct pairHasher
 		return (hash<int>()(p.first) ^ hash<int>()(p.second));
 	}
 };
+#endif
 
 pair<int, int> swapPairContent(pair<int, int> p)
 {
@@ -268,16 +270,18 @@ void runMaxBWPathDijkstraWithHeap(Graph *g, int sourceVertex, int destVertex, in
 			tempNode = tempNode->next;
 		}
 	}
+    delete h;
 }
 
-typedef pair<int, int> Pair;
-typedef map<Pair, float > edgeToWeightMap;
-typedef map<int, Pair > edgeMap;
-edgeToWeightMap edgeWeightMap;
-edgeMap			eMap;
 
 float runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathVector)
 {
+    typedef pair<int, int> Pair;
+    typedef map<Pair, float > edgeToWeightMap;
+    typedef map<int, Pair > edgeMap;
+    edgeToWeightMap edgeWeightMap;
+    edgeMap			eMap;
+
 	/* Create a sorted ordering of edges first */
 	float runTime;
 	adjListNode** adjList = g->getAdjacencyList();
@@ -292,7 +296,6 @@ float runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathV
 
 	for(int i = 0; i < vertexCount; i++)
 	{
-		//cout << i << endl;
 		adjListNode* neighborList = adjList[i]->next;
 		adjListNode* temp		  = neighborList;
 		while(temp != NULL)
@@ -348,9 +351,13 @@ float runMaxBWPathKruskal(Graph *g, int sourceVertex, int destVertex, int* pathV
 	t2 = clock();
 	runningTime = ((float) t2 - (float) t1) / CLOCKS_PER_SEC;
 	
+    eMap.erase(eMap.begin(), eMap.end());
+    edgeWeightMap.erase(edgeWeightMap.begin(), edgeWeightMap.end());
+
+    delete rankVector;
+    delete parentVector;
 	delete maxSpanningTree;
 	delete h;
-
 	return runningTime;
-	
+
 }
